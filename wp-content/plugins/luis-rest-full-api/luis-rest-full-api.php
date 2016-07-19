@@ -13,7 +13,7 @@ Author URI: https://opluss.com.br/
 License: GPLv2 or later
 Text Domain: luis-rest-full-api
 */
-
+header('Content-Type: application/json');
 
 if ( !function_exists( 'add_action' ) ) {
 	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
@@ -28,19 +28,22 @@ define( 'PLUGIN_DIR_MODEL', plugin_dir_path( __FILE__ )."app/src/model/" );
 define( 'DELETE_LIMIT', 100000 );
 
 require_once( PLUGIN_DIR_CONTROLLER . 'class.restFullController.php' );
-
+require_once( PLUGIN_DIR_MODEL.'class.restFullModel.php' );
 //http://localhost/wordpress/?rest_route=/luis-rest-full-api/getPosts
 
 add_action( 'rest_api_init', function () {
-register_rest_route( 'luis-rest-full-api', '/getPosts', array(
-'methods' => 'GET',
-'callback' => 'getPosts'
-
-) );
+	register_rest_route( 'luis-rest-full-api', '/getPosts', array(
+		'methods' => 'GET',
+		'callback' => 'getPosts'
+		
+		) );
 } );
 
 
-function getPosts()
+function getPosts($args)
 {
-	return 'teste';
+	$posts = new RestFullController(); 
+
+  return $posts->getPosts($args['key']);
+
 }
